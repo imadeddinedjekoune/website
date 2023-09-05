@@ -1,0 +1,77 @@
+{% load static %}
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+ <title>Test</title>
+  <link rel="stylesheet" type="text/css" href="{% static 'css/arabic.css' %}">
+</head>
+<body>
+
+<h1>Test</h1>
+
+
+<select name="wilaya" id="wilaya">
+  {% for w in wilaya%}  
+    <option value="{{w}}">{{w}}</option>
+  {% endfor %}
+</select>
+
+<select name="com" id="com">
+  {% for c in communesAlger %}  
+    <option value="{{c}}">{{c}}</option>
+  {% endfor %}
+</select>
+
+
+<h5 id="prix_domicile">Prix a domicile : </h5>
+<h5 id="prix_bureaux">Prix au bureaux : </h5>
+
+
+<script type="text/javascript">
+    document.querySelector("#wilaya").value = "Alger"
+</script>
+
+<script type="text/javascript">
+
+var selectElement = document.getElementById('wilaya');
+var prix_domicile = document.getElementById('prix_domicile');
+var prix_desk = document.getElementById('prix_bureaux');
+
+var data = {{ data|safe }}
+
+
+selectElement.addEventListener('change', function(event)
+{
+    var selectedValue = event.target.value;
+    var newOptions = []
+
+    
+    for (x in data[selectedValue][0])
+    {
+        newOptions.push({ value: data[selectedValue][0][x], text: data[selectedValue][0][x] });
+    }
+    
+    var secondSelect = document.querySelector("#com")
+    secondSelect.innerHTML = '';
+    
+    newOptions.forEach(function(option) {
+        var newOption = document.createElement('option');
+        newOption.value = option.value;
+        newOption.textContent = option.text;
+        secondSelect.appendChild(newOption);
+    });
+
+    prix_domicile.innerHTML = 'Prix a domicile : '+data[selectedValue][1]
+    prix_desk.innerHTML = 'Prix au bureaux : '+data[selectedValue][2]
+
+    
+});
+
+
+</script>
+    
+</body>
+</html>
